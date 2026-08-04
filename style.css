@@ -1,0 +1,117 @@
+:root {
+  --ink: #14213d;
+  --paper: #fafaf7;
+  --line: #d8d3c4;
+  --accent: #9a6b2c;
+  --error: #a6302c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Georgia', 'Iowan Old Style', serif;
+  line-height: 1.5;
+}
+
+.app-header {
+  padding: 2rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.01em;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  font-family: 'Menlo', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.app-main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.25rem;
+  background: white;
+}
+
+form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+label {
+  font-family: 'Menlo', 'Courier New', monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
+button:hover {
+  background: var(--accent);
+}
+
+.placeholder {
+  color: #8a8577;
+  font-style: italic;
+}
+
+.field-hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #8a8577;
+}
+
+.field-hint a {
+  color: var(--accent);
+}
+
+.error {
+  color: var(--error);
+}
+
+.app-footer {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1.5rem 2rem;
+  font-size: 0.85rem;
+  color: #8a8577;
+}
