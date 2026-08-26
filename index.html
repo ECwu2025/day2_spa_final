@@ -3,39 +3,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GenAI Finance App</title>
+  <title>Beacon Hill Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <header class="app-header">
-    <h1>GenAI Finance App</h1>
-    <p class="subtitle">Template starting point</p>
+    <div class="brand">
+      <span class="brand-mark">B</span>
+      <div>
+        <h1>Beacon Hill Terminal</h1>
+        <p class="subtitle">Live signals &middot; AI research notes &middot; earnings intelligence</p>
+      </div>
+    </div>
   </header>
 
-  <main class="app-main">
-    <section class="panel">
-      <form id="ticker-form">
-        <label for="ticker">Ticker</label>
-        <input id="ticker" name="ticker" type="text" placeholder="e.g. AAPL, MSFT, NVDA" required />
+  <div class="app-shell">
+    <aside class="sidebar">
+      <section class="panel">
+        <form id="ticker-form">
+          <div class="field-group">
+            <label for="ticker">Ticker</label>
+            <input id="ticker" name="ticker" type="text" placeholder="e.g. AAPL, MSFT, NVDA" required />
+          </div>
 
-        <label for="twelvedata-key">Twelve Data API key</label>
-        <input id="twelvedata-key" name="twelvedata-key" type="password" placeholder="Twelve Data key" required />
-        <p class="field-hint">The free Twelve Data plan covers all US stocks and ETFs, limited to 8 requests/minute and 800/day. Get a free key at <a href="https://twelvedata.com/pricing" target="_blank" rel="noopener">twelvedata.com</a>.</p>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="fast-window">Fast MA</label>
+              <input id="fast-window" name="fast-window" type="number" min="2" max="100" value="20" required />
+            </div>
+            <div class="field-group">
+              <label for="slow-window">Slow MA</label>
+              <input id="slow-window" name="slow-window" type="number" min="5" max="250" value="50" required />
+            </div>
+            <div class="field-group">
+              <label for="rsi-period">RSI</label>
+              <input id="rsi-period" name="rsi-period" type="number" min="2" max="50" value="14" required />
+            </div>
+          </div>
 
-        <label for="openrouter-key">OpenRouter API key</label>
-        <input id="openrouter-key" name="openrouter-key" type="password" placeholder="sk-or-..." required />
+          <details class="keys-collapsible" open>
+            <summary>API keys</summary>
 
-        <button type="submit">Analyze</button>
-      </form>
-    </section>
+            <div class="field-group">
+              <label for="twelvedata-key">Twelve Data key</label>
+              <input id="twelvedata-key" name="twelvedata-key" type="password" placeholder="Twelve Data key" required />
+              <p class="field-hint">Free tier at <a href="https://twelvedata.com/pricing" target="_blank" rel="noopener">twelvedata.com</a>.</p>
+            </div>
 
-    <section class="panel" id="results">
-      <p class="placeholder">Results will appear here once you wire up data fetching and your LLM call.</p>
-    </section>
-  </main>
+            <div class="field-group">
+              <label for="openrouter-key">OpenRouter key <span class="optional-tag">optional</span></label>
+              <input id="openrouter-key" name="openrouter-key" type="password" placeholder="sk-or-..." />
+              <p class="field-hint">Powers the research note, risk check &amp; earnings analysis.</p>
+            </div>
+
+            <div class="field-group">
+              <label for="model-select">LLM model</label>
+              <select id="model-select" name="model-select">
+                <option value="anthropic/claude-sonnet-5">Claude Sonnet 5</option>
+                <option value="anthropic/claude-haiku-4.5">Claude Haiku 4.5</option>
+                <option value="deepseek/deepseek-v4-pro">DeepSeek V4 Pro</option>
+                <option value="custom">Custom slug&hellip;</option>
+              </select>
+              <input id="model-custom" name="model-custom" type="text" placeholder="e.g. openai/gpt-4o-mini" class="hidden" />
+              <p class="field-hint">Any OpenRouter-hosted model works; free/cheap models are plenty for this course.</p>
+            </div>
+
+            <div class="field-group">
+              <label for="newsdata-key">NewsData.io key <span class="optional-tag">optional</span></label>
+              <input id="newsdata-key" name="newsdata-key" type="password" placeholder="pub_... (optional)" />
+              <p class="field-hint">Free tier at <a href="https://newsdata.io/" target="_blank" rel="noopener">newsdata.io</a>.</p>
+            </div>
+          </details>
+
+          <details class="keys-collapsible">
+            <summary>Additional context <span class="optional-tag">optional, press release / 10-K excerpt</span></summary>
+            <div class="field-group">
+              <textarea id="extra-context" name="extra-context" rows="4" placeholder="Paste a press release or 10-K/10-Q excerpt here. The AI research note will incorporate it."></textarea>
+            </div>
+          </details>
+
+          <details class="keys-collapsible">
+            <summary>Earnings call transcript <span class="optional-tag">optional, via Alpha Vantage</span></summary>
+
+            <div class="field-group">
+              <label for="alphavantage-key">Alpha Vantage key</label>
+              <input id="alphavantage-key" name="alphavantage-key" type="password" placeholder="Alpha Vantage key" />
+              <p class="field-hint">Free key (25 calls/day) at <a href="https://www.alphavantage.co/support/#api-key" target="_blank" rel="noopener">alphavantage.co</a>.</p>
+            </div>
+
+            <div class="field-group">
+              <label for="transcript-quarter">Quarter</label>
+              <input id="transcript-quarter" name="transcript-quarter" type="text" placeholder="e.g. 2024Q1" pattern="\d{4}Q[1-4]" />
+              <p class="field-hint">Uses the ticker above. Format: YYYYQ#.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="radio-group-label">Speaker filter</label>
+              <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="transcript-filter" value="all" checked /><span>All speakers</span></label>
+                <label class="radio-option"><input type="radio" name="transcript-filter" value="company" /><span>Company management</span></label>
+                <label class="radio-option"><input type="radio" name="transcript-filter" value="analyst" /><span>Analysts</span></label>
+              </div>
+            </div>
+          </details>
+
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">Analyze</button>
+            <button type="button" id="reset-form-btn" class="ghost-btn">Reset</button>
+          </div>
+        </form>
+      </section>
+    </aside>
+
+    <main class="results-column">
+      <section class="panel" id="results">
+        <p class="placeholder">Enter a ticker and your Twelve Data key, then Analyze to build the dashboard.</p>
+      </section>
+    </main>
+  </div>
 
   <footer class="app-footer">
-    <p>Replace this scaffold with your own build. See README.md for setup notes.</p>
+    <p>Beacon Hill Terminal &mdash; GenAI Finance course, Repo 1. Built on the class SPA template.</p>
   </footer>
 
   <script type="module" src="./main.js"></script>
