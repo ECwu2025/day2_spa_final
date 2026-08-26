@@ -947,13 +947,27 @@ function destroyChart() {
 // --- PDF export -----------------------------------------------------------
 
 function exportToPdf(ticker) {
+  // The dashboard's dark theme lives in CSS custom properties; html2canvas's
+  // own backgroundColor option only fills the gaps, not the explicitly
+  // dark-styled cards, so switch to the light overrides below for the
+  // capture and switch back once the PDF is done.
+  results.classList.add('pdf-export');
+
+  const cleanup = () => results.classList.remove('pdf-export');
+
   html2pdf()
     .set({
       margin: 0.4,
       filename: `${ticker}-research-note.pdf`,
-      html2canvas: { scale: 2, backgroundColor: '#0b0f1f' },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      html2canvas: { scale: 2, backgroundColor: '#ffffff', windowWidth: results.scrollWidth },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      // 'legacy' alone slices strictly by pixel offset, which can cut a
+      // chart or card in half at a page boundary; 'css' makes it respect
+      // the break-inside: avoid rules in style.css instead.
+      pagebreak: { mode: ['css', 'legacy'] }
     })
     .from(results)
-    .save();
+    .save()
+    .then(cleanup)
+    .catch(cleanup);
 }

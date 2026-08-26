@@ -792,3 +792,43 @@ button {
   font-size: 0.8rem;
   color: var(--ink-dim);
 }
+
+/* --- PDF export --- */
+
+/* Applied to #results only while html2canvas is capturing it (see
+   exportToPdf) — light overrides for the same variables the dark theme
+   uses, so a printed page isn't a solid dark rectangle. The ECharts canvas
+   itself keeps its own colors (it's pre-rendered pixels, not CSS), but its
+   background is transparent so it still sits on white underneath. */
+#results.pdf-export {
+  --bg: #ffffff;
+  --bg-elevated: #f6f7fb;
+  --bg-card: #ffffff;
+  --border: #d8dcec;
+  --border-soft: #e7e9f4;
+  --ink: #14181f;
+  --ink-dim: #5b6178;
+  --accent-blue: #3352c9;
+  background: #ffffff;
+  /* `color` inherits the parent's already-resolved value, not the variable
+     reference — redefining --ink above doesn't reach descendants that rely
+     on inheriting `color` from <body> unless this element also sets it.
+     Anything with its own `color: var(--ink-dim | --positive | ...)` still
+     resolves correctly on its own; this only fixes the plain inheritors
+     (headings, bare <p>/<span> text). */
+  color: var(--ink);
+}
+
+/* Keep charts, cards, and table-like rows from being sliced across a PDF
+   page boundary — without this, html2pdf's default pixel-based pagination
+   can cut a chart or card in half. */
+.chart-panel,
+.card,
+.stat-row,
+.news-item,
+.quote-card,
+.speaker-panel,
+.backtest-row {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
