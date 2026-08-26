@@ -357,8 +357,22 @@ button {
   font-size: 0.9rem;
 }
 
+.fetch-timestamp {
+  margin: 0.3rem 0 0;
+  font-size: 0.68rem;
+  color: var(--ink-dim);
+}
+
 .change.pos { color: var(--positive); }
 .change.neg { color: var(--negative); }
+
+.rating-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
 
 .rating-badge {
   padding: 0.4rem 0.85rem;
@@ -366,7 +380,6 @@ button {
   font-weight: 700;
   font-size: 0.85rem;
   letter-spacing: 0.04em;
-  flex-shrink: 0;
 }
 
 .rating-buy { background: var(--positive-bg); color: var(--positive); }
@@ -549,48 +562,140 @@ button {
 .sentiment-negative { background: var(--negative-bg); color: var(--negative); }
 .sentiment-neutral { background: var(--neutral-bg); color: var(--ink-dim); }
 
-/* Average per-statement sentiment score from Alpha Vantage. Discrete labeled
-   zones rather than a continuous red-green gradient, since a smooth
-   red<->green blend is one of the harder cases for colorblind readers. */
-.sentiment-meter {
-  margin: 0.85rem 0 1rem;
+.subsection-title {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-dim);
 }
 
-.meter-track {
-  position: relative;
-  height: 6px;
+/* Data-driven overview computed client-side from Alpha Vantage's own
+   per-statement scores (no extra LLM call). Positive/negative are shown as
+   a two-segment bar with a 2px surface gap between the fills, rather than a
+   continuous gradient — see the sentiment-badge comment for why. */
+.sentiment-overview {
+  margin: 0.5rem 0 1.25rem;
+}
+
+.overview-meta {
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+  margin: 0 0 0.6rem;
+}
+
+.overview-bar {
+  display: flex;
+  height: 10px;
   border-radius: 999px;
+  overflow: hidden;
+  gap: 2px;
   background: var(--border-soft);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
 
-.meter-marker {
-  position: absolute;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2px solid var(--bg-card);
-  transform: translate(-50%, -50%);
-}
+.overview-bar-pos { background: var(--positive); }
+.overview-bar-neg { background: var(--negative); }
 
-.meter-marker.pos { background: var(--positive); }
-.meter-marker.neg { background: var(--negative); }
-.meter-marker.neutral { background: var(--ink-dim); }
-
-.meter-labels {
+.overview-counts {
   display: flex;
   justify-content: space-between;
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   color: var(--ink-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
 }
 
-.meter-score {
+.overview-counts strong {
+  color: var(--ink);
+}
+
+.overview-caveat {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--ink-dim);
+  margin: 0 0 1rem;
+}
+
+.speaker-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .speaker-panels { grid-template-columns: 1fr; }
+}
+
+.speaker-panel {
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-elevated);
+}
+
+.speaker-panel--pos { border-top-color: var(--positive); }
+.speaker-panel--neg { border-top-color: var(--negative); }
+
+.speaker-panel h5 {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  color: var(--ink-dim);
+  font-weight: 600;
+}
+
+.speaker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.82rem;
+}
+
+.speaker-row:last-child {
+  border-bottom: none;
+}
+
+.speaker-score-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.speaker-score-pill.pos { background: var(--positive-bg); color: var(--positive); }
+.speaker-score-pill.neg { background: var(--negative-bg); color: var(--negative); }
+
+.quote-cards {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0;
+}
+
+.quote-card {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-left: 3px solid var(--border);
+  background: var(--bg-elevated);
+  border-radius: 0 8px 8px 0;
+}
+
+.quote-card--pos { border-left-color: var(--positive); }
+.quote-card--neg { border-left-color: var(--negative); }
+
+.quote-text {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.quote-attribution {
   font-size: 0.7rem;
   color: var(--ink-dim);
-  margin-top: 0.3rem;
 }
 
 .product-list {
@@ -633,6 +738,49 @@ button {
 
 .hidden {
   display: none !important;
+}
+
+/* --- Backtest --- */
+
+.backtest-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.82rem;
+}
+
+.backtest-row:last-child {
+  border-bottom: none;
+}
+
+.backtest-label {
+  color: var(--ink);
+}
+
+.backtest-stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.backtest-stat.pos { color: var(--positive); }
+.backtest-stat.neg { color: var(--negative); }
+
+.backtest-hint {
+  grid-column: 1 / -1;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--ink-dim);
+}
+
+@media (max-width: 560px) {
+  .backtest-row {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* --- Footer --- */

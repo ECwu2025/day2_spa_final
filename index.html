@@ -45,6 +45,20 @@
           </div>
 
           <details class="keys-collapsible" open>
+            <summary>LLM model</summary>
+            <div class="field-group">
+              <select id="model-select" name="model-select">
+                <option value="anthropic/claude-sonnet-5">Claude Sonnet 5</option>
+                <option value="anthropic/claude-haiku-4.5">Claude Haiku 4.5</option>
+                <option value="deepseek/deepseek-v4-pro">DeepSeek V4 Pro</option>
+                <option value="custom">Custom slug&hellip;</option>
+              </select>
+              <input id="model-custom" name="model-custom" type="text" placeholder="e.g. openai/gpt-4o-mini" class="hidden" />
+              <p class="field-hint">Any OpenRouter-hosted model works; free/cheap models are plenty for this course.</p>
+            </div>
+          </details>
+
+          <details class="keys-collapsible" open>
             <summary>API keys</summary>
 
             <div class="field-group">
@@ -60,18 +74,6 @@
             </div>
 
             <div class="field-group">
-              <label for="model-select">LLM model</label>
-              <select id="model-select" name="model-select">
-                <option value="anthropic/claude-sonnet-5">Claude Sonnet 5</option>
-                <option value="anthropic/claude-haiku-4.5">Claude Haiku 4.5</option>
-                <option value="deepseek/deepseek-v4-pro">DeepSeek V4 Pro</option>
-                <option value="custom">Custom slug&hellip;</option>
-              </select>
-              <input id="model-custom" name="model-custom" type="text" placeholder="e.g. openai/gpt-4o-mini" class="hidden" />
-              <p class="field-hint">Any OpenRouter-hosted model works; free/cheap models are plenty for this course.</p>
-            </div>
-
-            <div class="field-group">
               <label for="newsdata-key">NewsData.io key <span class="optional-tag">optional</span></label>
               <input id="newsdata-key" name="newsdata-key" type="password" placeholder="pub_... (optional)" />
               <p class="field-hint">Free tier at <a href="https://newsdata.io/" target="_blank" rel="noopener">newsdata.io</a>.</p>
@@ -79,9 +81,12 @@
           </details>
 
           <details class="keys-collapsible">
-            <summary>Additional context <span class="optional-tag">optional, press release / 10-K excerpt</span></summary>
+            <summary>Filings &amp; press releases <span class="optional-tag">optional</span></summary>
+
             <div class="field-group">
-              <textarea id="extra-context" name="extra-context" rows="4" placeholder="Paste a press release or 10-K/10-Q excerpt here. The AI research note will incorporate it."></textarea>
+              <label for="extra-context">Paste an excerpt <span class="optional-tag">press release / 10-K / 10-Q</span></label>
+              <textarea id="extra-context" name="extra-context" rows="4" placeholder="Paste text here — the AI research note will incorporate it."></textarea>
+              <p class="field-hint"><a href="#" id="sec-edgar-link" target="_blank" rel="noopener">Look up this ticker's 10-K/10-Q on SEC EDGAR &#8599;</a> (no free API exposes full filing or press-release text to a browser — FMP moved this behind a paid plan too — so this stays a quick copy-paste instead of a broken auto-fetch).</p>
             </div>
           </details>
 
@@ -126,7 +131,7 @@
   </div>
 
   <footer class="app-footer">
-    <p>Beacon Hill Terminal &mdash; GenAI Finance course, Repo 1. Built on the class SPA template.</p>
+    <p>Beacon Hill Terminal &mdash; GenAI Finance course. Built on the class SPA template.</p>
   </footer>
 
   <script type="module" src="./main.js"></script>
